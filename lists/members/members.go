@@ -137,7 +137,6 @@ func New(listID string, params *NewParams) (*Member, error) {
 }
 
 // Get retrieves information about members in a list.
-// about that specific member.
 //
 // Method: GET
 // Resource: /lists/{list_id}/members
