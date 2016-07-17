@@ -26,7 +26,7 @@ import mailchimp "github.com/beeker1121/mailchimp-go"
 
 At the moment, this library has minimal coverage of the MailChimp API.
 
-### Add member to list
+### Add a member to a list
 
 ```go
 package main
@@ -61,5 +61,3 @@ func main() {
 	fmt.Printf("%v\n", member)
 }
 ```
-
-## Benchmarks
