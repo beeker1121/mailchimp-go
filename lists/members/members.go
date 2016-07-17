@@ -126,7 +126,6 @@ type GetParams struct {
 // Definition: http://developer.mailchimp.com/documentation/mailchimp/reference/lists/members/#create-post_lists_list_id_members
 func New(listID string, params *NewParams) (*Member, error) {
 	res := &Member{}
-
 	path := fmt.Sprintf("lists/%s/members", listID)
 
 	if err := mailchimp.Call("POST", path, nil, params, res); err != nil {
@@ -142,7 +141,16 @@ func New(listID string, params *NewParams) (*Member, error) {
 // Resource: /lists/{list_id}/members
 //
 // Definition: http://developer.mailchimp.com/documentation/mailchimp/reference/lists/members/#read-get_lists_list_id_members
-//func Get(listID string, params *GetParams) (*ListMembers, error) {}
+func Get(listID string, params *GetParams) (*ListMembers, error) {
+	res := &ListMembers{}
+	path := fmt.Sprintf("lists/%s/members", listID)
+
+	if err := mailchimp.Call("GET", path, params, nil, res); err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
 
 // GetMember retrieves information about a specific member within a list.
 //

@@ -51,13 +51,48 @@ func main() {
 		Status:       members.StatusSubscribed,
 	}
 
-	// Add the member to list 123456.
+	// Add member to list 123456.
 	member, err := members.New("123456", params)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	fmt.Printf("%v\n", member)
+	fmt.Printf("%+v\n", member)
+}
+```
+
+### Get list members
+
+```go
+package main
+
+import (
+	"fmt"
+
+	mailchimp "github.com/beeker1121/mailchimp-go"
+	"github.com/beeker1121/mailchimp-go/lists/members"
+)
+
+func main() {
+	// Set API key.
+	if err := mailchimp.SetKey("YOUR-API-KEY"); err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	// Set request parameters.
+	params := &members.GetParams{
+		Status: members.StatusSubscribed,
+	}
+
+	// Get subscribed members of list 123456.
+	listMembers, err := members.Get("123456", params)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Printf("%+v\n", listMembers)
 }
 ```
