@@ -104,8 +104,8 @@ type NewParams struct {
 // GetParams defines the available parameters that can be used when
 // getting a list of members via the Get function.
 type GetParams struct {
-	Fields             []string  `url:"fields,omitempty"`
-	ExcludeFields      []string  `url:"exclude_fields,omitempty"`
+	Fields             string    `url:"fields,omitempty"`
+	ExcludeFields      string    `url:"exclude_fields,omitempty"`
 	Count              int       `url:"count,omitempty"`
 	Offset             int       `url:"offset,omitempty"`
 	EmailType          EmailType `url:"email_type,omitempty"`
