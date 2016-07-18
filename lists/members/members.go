@@ -118,6 +118,14 @@ type GetParams struct {
 	VIPOnly            bool      `url:"vip_only,omitempty"`
 }
 
+// GetMemberParams defines the available parameters that can be used
+// when getting information on a specific member via the GetMember
+// function.
+type GetMemberParams struct {
+	Fields        string `url:"fields,omitempty"`
+	ExcludeFields string `url:"exclude_fields,omitempty"`
+}
+
 // New adds a new list member.
 //
 // Method:     POST
@@ -126,7 +134,6 @@ type GetParams struct {
 func New(listID string, params *NewParams) (*Member, error) {
 	res := &Member{}
 	path := fmt.Sprintf("lists/%s/members", listID)
-
 	if err := mailchimp.Call("POST", path, nil, params, res); err != nil {
 		return nil, err
 	}
@@ -141,7 +148,6 @@ func New(listID string, params *NewParams) (*Member, error) {
 func Get(listID string, params *GetParams) (*ListMembers, error) {
 	res := &ListMembers{}
 	path := fmt.Sprintf("lists/%s/members", listID)
-
 	if err := mailchimp.Call("GET", path, params, nil, res); err != nil {
 		return nil, err
 	}
@@ -150,8 +156,14 @@ func Get(listID string, params *GetParams) (*ListMembers, error) {
 
 // GetMember retrieves information about a specific member within a list.
 //
-// Method: GET
-// Resource: /lists/{list_id}/members/{subscriber_hash}
-//
+// Method:     GET
+// Resource:   /lists/{list_id}/members/{subscriber_hash}
 // Definition: http://developer.mailchimp.com/documentation/mailchimp/reference/lists/members/#read-get_lists_list_id_members_subscriber_hash
-//func GetMember(listID, hash string, params *GetMemberParams) (*Member, error) {}
+func GetMember(listID, hash string, params *GetMemberParams) (*Member, error) {
+	res := &Member{}
+	path := fmt.Sprintf("lists/%s/members/%s", listID, hash)
+	if err := mailchimp.Call("GET", path, params, nil, res); err != nil {
+		return nil, err
+	}
+	return res, nil
+}
