@@ -1,7 +1,7 @@
 package lists
 
 // Contact defines the contact information of the list owner, which
-// is displayed in footer of campaigns.
+// is displayed in the footer of campaigns.
 type Contact struct {
 	Company  string `json:"company"`
 	Address1 string `json:"address1"`
