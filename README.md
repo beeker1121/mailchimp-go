@@ -12,7 +12,7 @@ Below is the main mailchimp-go GoDoc reference:
 
 **mailchimp-go** - [http://godoc.org/github.com/beeker1121/mailchimp-go](http://godoc.org/github.com/beeker1121/mailchimp-go)
 
-Each API resource is a separate package within mailchimp-go, which must be imported to be used.
+Each API resource is a separate package within mailchimp-go.
 
 Below are the GoDoc references for each supported resource:
 
