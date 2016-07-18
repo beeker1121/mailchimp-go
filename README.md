@@ -6,7 +6,12 @@ While coverage of the MailChimp API is limited in the current state, the goal is
 
 Contributing code to complete missing resources is greatly appreciated.
 
-## Features
+## API Reference
+
+Each API resource is a separate package within mailchimp-go. Below is the GoDoc reference for each supported resource:
+
+Lists - [https://godoc.org/github.com/beeker1121/mailchimp-go/lists](https://godoc.org/github.com/beeker1121/mailchimp-go/lists)
+Lists/Members - [https://godoc.org/github.com/beeker1121/mailchimp-go/lists/members](https://godoc.org/github.com/beeker1121/mailchimp-go/lists/members)
 
 ## Installation
 
@@ -22,7 +27,7 @@ Import to your project:
 import mailchimp "github.com/beeker1121/mailchimp-go"
 ```
 
-API resources are separate packages. For example, to use the /lists resource, you must import it:
+Import the API resources you wish to use. For example, to use the `Lists` resource:
 
 ```go
 import "github.com/beeker1121/mailchimp-go/lists"
