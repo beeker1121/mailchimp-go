@@ -26,73 +26,50 @@ import mailchimp "github.com/beeker1121/mailchimp-go"
 
 At the moment, this library has minimal coverage of the MailChimp API.
 
+### Set API Key
+
+First, set your MailChimp API key:
+
+```go
+if err := mailchimp.SetKey("YOUR-API-KEY"); err != nil {
+	fmt.Println(err)
+	return
+}
+```
+
 ### Add a member to a list
 
 ```go
-package main
-
-import (
-	"fmt"
-
-	mailchimp "github.com/beeker1121/mailchimp-go"
-	"github.com/beeker1121/mailchimp-go/lists/members"
-)
-
-func main() {
-	// Set API key.
-	if err := mailchimp.SetKey("YOUR-API-KEY"); err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	// Set request parameters.
-	params := &members.NewParams{
-		EmailAddress: "user@example.com",
-		Status:       members.StatusSubscribed,
-	}
-
-	// Add member to list 123456.
-	member, err := members.New("123456", params)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	fmt.Printf("%+v\n", member)
+// Set request parameters.
+params := &members.NewParams{
+	EmailAddress: "user@example.com",
+	Status:       members.StatusSubscribed,
 }
+
+// Add member to list 123456.
+member, err := members.New("123456", params)
+if err != nil {
+	fmt.Println(err)
+	return
+}
+
+fmt.Printf("%+v\n", member)
 ```
 
 ### Get list members
 
 ```go
-package main
-
-import (
-	"fmt"
-
-	mailchimp "github.com/beeker1121/mailchimp-go"
-	"github.com/beeker1121/mailchimp-go/lists/members"
-)
-
-func main() {
-	// Set API key.
-	if err := mailchimp.SetKey("YOUR-API-KEY"); err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	// Set request parameters.
-	params := &members.GetParams{
-		Status: members.StatusSubscribed,
-	}
-
-	// Get subscribed members of list 123456.
-	listMembers, err := members.Get("123456", params)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	fmt.Printf("%+v\n", listMembers)
+// Set request parameters.
+params := &members.GetParams{
+	Status: members.StatusSubscribed,
 }
+
+// Get subscribed members of list 123456.
+listMembers, err := members.Get("123456", params)
+if err != nil {
+	fmt.Println(err)
+	return
+}
+
+fmt.Printf("%+v\n", listMembers)
 ```

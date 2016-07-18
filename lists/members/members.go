@@ -120,9 +120,8 @@ type GetParams struct {
 
 // New adds a new list member.
 //
-// Method:   POST
-// Resource: lists/{list_id}/members
-//
+// Method:     POST
+// Resource:   /lists/{list_id}/members
 // Definition: http://developer.mailchimp.com/documentation/mailchimp/reference/lists/members/#create-post_lists_list_id_members
 func New(listID string, params *NewParams) (*Member, error) {
 	res := &Member{}
@@ -131,15 +130,13 @@ func New(listID string, params *NewParams) (*Member, error) {
 	if err := mailchimp.Call("POST", path, nil, params, res); err != nil {
 		return nil, err
 	}
-
 	return res, nil
 }
 
 // Get retrieves information about members in a list.
 //
-// Method: GET
-// Resource: /lists/{list_id}/members
-//
+// Method:     GET
+// Resource:   /lists/{list_id}/members
 // Definition: http://developer.mailchimp.com/documentation/mailchimp/reference/lists/members/#read-get_lists_list_id_members
 func Get(listID string, params *GetParams) (*ListMembers, error) {
 	res := &ListMembers{}
@@ -148,7 +145,6 @@ func Get(listID string, params *GetParams) (*ListMembers, error) {
 	if err := mailchimp.Call("GET", path, params, nil, res); err != nil {
 		return nil, err
 	}
-
 	return res, nil
 }
 
