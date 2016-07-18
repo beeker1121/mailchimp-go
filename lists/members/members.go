@@ -186,7 +186,7 @@ func GetMember(listID, hash string, params *GetMemberParams) (*Member, error) {
 	return res, nil
 }
 
-// Update updates a member within a list.
+// Update updates a list member.
 //
 // Method:     PUT
 // Resource:   /lists/{list_id}/members/{subscriber_hash}
@@ -198,4 +198,17 @@ func Update(listID, hash string, params *UpdateParams) (*Member, error) {
 		return nil, err
 	}
 	return res, nil
+}
+
+// Delete deletes a list member.
+//
+// Method:     DELETE
+// Resource:   /lists/{list_id}/members/{subscriber_hash}
+// Definition: http://developer.mailchimp.com/documentation/mailchimp/reference/lists/members/#delete-delete_lists_list_id_members_subscriber_hash
+func Delete(listID, hash string) error {
+	path := fmt.Sprintf("lists/%s/members/%s", listID, hash)
+	if err := mailchimp.Call("DELETE", path, nil, nil, nil); err != nil {
+		return err
+	}
+	return nil
 }
