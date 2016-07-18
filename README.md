@@ -22,6 +22,12 @@ Import to your project:
 import mailchimp "github.com/beeker1121/mailchimp-go"
 ```
 
+API resources are separate packages. For example, to use the /lists resource, you must import it:
+
+```go
+import "github.com/beeker1121/mailchimp-go/lists"
+```
+
 ## Usage
 
 At the moment, this library has minimal coverage of the MailChimp API.
@@ -31,6 +37,8 @@ At the moment, this library has minimal coverage of the MailChimp API.
 First, set your MailChimp API key:
 
 ```go
+import mailchimp "github.com/beeker1121/mailchimp-go"
+...
 err := mailchimp.SetKey("YOUR-API-KEY")
 ...
 ```
