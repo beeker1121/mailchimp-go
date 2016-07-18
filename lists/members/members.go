@@ -63,7 +63,7 @@ type Member struct {
 	MergeFields     map[string]interface{} `json:"merge_fields,omitempty"`
 	Interests       map[string]bool        `json:"interests,omitempty"`
 	Stats           *Stats                 `json:"stats,omitempty"`
-	IPSignup        string                 `json:"ip_signup",omitempty"`
+	IPSignup        string                 `json:"ip_signup,omitempty"`
 	TimestampSignup string                 `json:"timestamp_signup,omitempty"`
 	IPOpt           string                 `json:"ip_opt,omitempty"`
 	TimestampOpt    string                 `json:"timestamp_opt,omitempty"`
