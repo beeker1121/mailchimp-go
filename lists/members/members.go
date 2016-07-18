@@ -126,6 +126,24 @@ type GetMemberParams struct {
 	ExcludeFields string `url:"exclude_fields,omitempty"`
 }
 
+// UpdateParams defines the available parameters that can be used when
+// updating a list member via the Update function.
+type UpdateParams struct {
+	EmailType       EmailType              `json:"email_type,omitempty"`
+	Status          Status                 `json:"status,omitempty"`
+	MergeFields     map[string]interface{} `json:"merge_fields,omitempty"`
+	Interests       map[string]bool        `json:"interests,omitempty"`
+	Language        string                 `json:"language,omitempty"`
+	VIP             bool                   `json:"vip,omitempty"`
+	Location        *Location              `json:"location,omitempty"`
+	IPSignup        string                 `json:"ip_signup,omitempty"`
+	TimestampSignup string                 `json:"timestamp_signup,omitempty"`
+	IPOpt           string                 `json:"ip_opt,omitempty"`
+	TimestampOpt    string                 `json:"timestamp_opt,omitempty"`
+	EmailAddress    string                 `json:"email_address,omitempty"`
+	StatusIfNew     string                 `json:"status_if_new,omitempty"`
+}
+
 // New adds a new list member.
 //
 // Method:     POST
@@ -163,6 +181,20 @@ func GetMember(listID, hash string, params *GetMemberParams) (*Member, error) {
 	res := &Member{}
 	path := fmt.Sprintf("lists/%s/members/%s", listID, hash)
 	if err := mailchimp.Call("GET", path, params, nil, res); err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+// Update updates a member within a list.
+//
+// Method:     PUT
+// Resource:   /lists/{list_id}/members/{subscriber_hash}
+// Definition: http://developer.mailchimp.com/documentation/mailchimp/reference/lists/members/#edit-put_lists_list_id_members_subscriber_hash
+func Update(listID, hash string, params *UpdateParams) (*Member, error) {
+	res := &Member{}
+	path := fmt.Sprintf("lists/%s/members/%s", listID, hash)
+	if err := mailchimp.Call("PUT", path, nil, params, res); err != nil {
 		return nil, err
 	}
 	return res, nil
