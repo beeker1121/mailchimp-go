@@ -35,9 +35,45 @@ err := mailchimp.SetKey("YOUR-API-KEY")
 ...
 ```
 
+### Create a list
+
+```go
+import "github.com/beeker1121/mailchimp-go/lists"
+...
+
+// Set request parameters.
+params := &lists.NewParams{
+	Name: "My List",
+	Contact: &lists.Contact{
+		Company:  "Acme Corp",
+		Address1: "123 Main St",
+		City:     "Chicago",
+		State:    "IL",
+		Zip:      "60613",
+		Country:  "United States",
+	},
+	PermissionReminder: "You opted to receive updates on Acme Corp",
+	CampaignDefaults: &lists.CampaignDefaults{
+		FromName:  "John Doe",
+		FromEmail: "newsletter@acmecorp.com",
+		Subject:   "Newsletter",
+		Language:  "en",
+	},
+	EmailTypeOption: false,
+	Visibility:      lists.VisibilityPublic,
+}
+
+list, err := lists.New(params)
+...
+fmt.Printf("%+v\n", list)
+```
+
 ### Add a member to a list
 
 ```go
+import "github.com/beeker1121/mailchimp-go/lists/members"
+...
+
 // Set request parameters.
 params := &members.NewParams{
 	EmailAddress: "user@example.com",
@@ -53,6 +89,9 @@ fmt.Printf("%+v\n", member)
 ### Get list members
 
 ```go
+import "github.com/beeker1121/mailchimp-go/lists/members"
+...
+
 // Set request parameters.
 params := &members.GetParams{
 	Status: members.StatusSubscribed,

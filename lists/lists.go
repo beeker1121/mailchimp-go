@@ -1,5 +1,7 @@
 package lists
 
+import mailchimp "github.com/beeker1121/mailchimp-go"
+
 // Contact defines the contact information of the list owner, which
 // is displayed in the footer of campaigns.
 type Contact struct {
@@ -20,6 +22,15 @@ type CampaignDefaults struct {
 	Subject   string `json:"subject"`
 	Language  string `json:"language"`
 }
+
+// Visibility defines whether a list is public or private
+type Visibility string
+
+// The visibility definitions.
+const (
+	VisibilityPublic  Visibility = "pub"
+	VisibilityPrivate            = "prv"
+)
 
 // Stats defines statistics for a list.
 type Stats struct {
@@ -59,7 +70,34 @@ type List struct {
 	SubscribeUrlShort   string            `json:"subscribe_url_short,omitempty"`
 	SubscribeUrlLong    string            `json:"subscribe_url_long,omitempty"`
 	BeamerAddress       string            `json:"beamer_address,omitempty"`
-	Visibility          string            `json:"visibility"`
+	Visibility          Visibility        `json:"visibility"`
 	Modules             []string          `json:"modules,omitempty"`
 	Stats               *Stats            `json:"stats,omitempty"`
+}
+
+// NewParams defines the available parameters that can be used when
+// creating a new list via the New function.
+type NewParams struct {
+	Name                string            `json:"name"`
+	Contact             *Contact          `json:"contact"`
+	PermissionReminder  string            `json:"permission_reminder"`
+	UseArchiveBar       bool              `json:"use_archive_bar,omitempty"`
+	CampaignDefaults    *CampaignDefaults `json:"campaign_defaults"`
+	NotifyOnSubscribe   string            `json:"notify_on_subscribe,omitempty"`
+	NotifyOnUnsubscribe string            `json:"notify_on_unsubscribe,omitempty"`
+	EmailTypeOption     bool              `json:"email_type_option"`
+	Visibility          Visibility        `json:"visibility"`
+}
+
+// New creates a new list.
+//
+// Method:     POST
+// Resource:   /lists
+// Definition: http://developer.mailchimp.com/documentation/mailchimp/reference/lists/#create-post_lists
+func New(params *NewParams) (*List, error) {
+	res := &List{}
+	if err := mailchimp.Call("POST", "lists", nil, params, res); err != nil {
+		return nil, err
+	}
+	return res, nil
 }
