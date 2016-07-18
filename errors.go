@@ -15,12 +15,19 @@ var (
 	ErrAPIKeyFormat = errors.New("gochimp: Invalid API key format")
 )
 
+// Error defines a field error.
+type Error struct {
+	Field   string `json:"field"`
+	Message string `json:"message"`
+}
+
 // APIError defines the MailChimp API response error structure.
 type APIError struct {
-	Type   string `json:"type"`
-	Title  string `json:"title"`
-	Status int    `json:"status"`
-	Detail string `json:"detail"`
+	Type   string  `json:"type"`
+	Title  string  `json:"title"`
+	Status int     `json:"status"`
+	Detail string  `json:"detail"`
+	Errors []Error `json:"errors,omitempty"`
 }
 
 // Error satisfies the error interface method.
