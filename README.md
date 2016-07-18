@@ -31,10 +31,8 @@ At the moment, this library has minimal coverage of the MailChimp API.
 First, set your MailChimp API key:
 
 ```go
-if err := mailchimp.SetKey("YOUR-API-KEY"); err != nil {
-	fmt.Println(err)
-	return
-}
+err := mailchimp.SetKey("YOUR-API-KEY")
+...
 ```
 
 ### Add a member to a list
@@ -48,11 +46,7 @@ params := &members.NewParams{
 
 // Add member to list 123456.
 member, err := members.New("123456", params)
-if err != nil {
-	fmt.Println(err)
-	return
-}
-
+...
 fmt.Printf("%+v\n", member)
 ```
 
@@ -66,10 +60,6 @@ params := &members.GetParams{
 
 // Get subscribed members of list 123456.
 listMembers, err := members.Get("123456", params)
-if err != nil {
-	fmt.Println(err)
-	return
-}
-
+...
 fmt.Printf("%+v\n", listMembers)
 ```
