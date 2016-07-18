@@ -1,4 +1,4 @@
-# mailchimp-go [![GoDoc](http://img.shields.io/badge/godoc-reference-blue.svg)](http://godoc.org/github.com/beeker1121/mailchimp-go) [![License](http://img.shields.io/badge/license-mit_bsd-blue.svg)](https://raw.githubusercontent.com/beeker1121/mailchimp-go/master/LICENSE) [![Go Report Card](https://img.shields.io/badge/go_report-A+-brightgreen.svg)](https://goreportcard.com/report/github.com/beeker1121/mailchimp-go)
+# mailchimp-go [![License](http://img.shields.io/badge/license-mit_bsd-blue.svg)](https://raw.githubusercontent.com/beeker1121/mailchimp-go/master/LICENSE) [![Go Report Card](https://img.shields.io/badge/go_report-A+-brightgreen.svg)](https://goreportcard.com/report/github.com/beeker1121/mailchimp-go)
 
 mailchimp-go is a Go client for the MailChimp API v3.
 
@@ -10,8 +10,9 @@ Contributing code to complete missing resources is greatly appreciated.
 
 Each API resource is a separate package within mailchimp-go. Below is the GoDoc reference for each supported resource:
 
-Lists - [https://godoc.org/github.com/beeker1121/mailchimp-go/lists](https://godoc.org/github.com/beeker1121/mailchimp-go/lists)  
-Lists/Members - [https://godoc.org/github.com/beeker1121/mailchimp-go/lists/members](https://godoc.org/github.com/beeker1121/mailchimp-go/lists/members)
+**mailchimp-go** - [http://godoc.org/github.com/beeker1121/mailchimp-go](http://godoc.org/github.com/beeker1121/mailchimp-go)  
+**Lists** - [https://godoc.org/github.com/beeker1121/mailchimp-go/lists](https://godoc.org/github.com/beeker1121/mailchimp-go/lists)  
+**Lists/Members** - [https://godoc.org/github.com/beeker1121/mailchimp-go/lists/members](https://godoc.org/github.com/beeker1121/mailchimp-go/lists/members)
 
 ## Installation
 
