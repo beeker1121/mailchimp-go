@@ -92,7 +92,7 @@ func (m *Member) UnmarshalJSON(data []byte) error {
 		alias: (*alias)(m),
 	}
 
-	if err := json.Unmarshal(data, &aux); err != nil {
+	if err := json.Unmarshal(data, aux); err != nil {
 		return err
 	}
 
@@ -192,6 +192,21 @@ type UpdateParams struct {
 	TimestampOpt    string                 `json:"timestamp_opt,omitempty"`
 	EmailAddress    string                 `json:"email_address,omitempty"`
 	StatusIfNew     string                 `json:"status_if_new,omitempty"`
+}
+
+// MarshalJSON handles custom JSON marshalling for the UpdateParams object.
+// Credit to http://choly.ca/post/go-json-marshalling/
+func (up *UpdateParams) MarshalJSON() ([]byte, error) {
+	type alias UpdateParams
+	return json.Marshal(&struct {
+		*alias
+		TimestampSignup string `json:"timestamp_signup,omitempty"`
+		TimestampOpt    string `json:"timestamp_opt,omitempty"`
+	}{
+		alias:           (*alias)(up),
+		TimestampSignup: up.TimestampSignup.Format("2006-01-02 15:04:05"),
+		TimestampOpt:    up.TimestampOpt.Format("2006-01-02 15:04:05"),
+	})
 }
 
 // New adds a new list member.
