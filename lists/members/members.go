@@ -78,22 +78,7 @@ type Member struct {
 	ListID          string                 `json:"list_id"`
 }
 
-// MarshalJSON handles custom JSON marshalling for Member objects.
-// Credit to http://choly.ca/post/go-json-marshalling/
-func (m *Member) MarshalJSON() ([]byte, error) {
-	type alias Member
-	return json.Marshal(&struct {
-		*alias
-		TimestampSignup string `json:"timestamp_signup,omitempty"`
-		TimestampOpt    string `json:"timestamp_opt,omitempty"`
-	}{
-		alias:           (*alias)(m),
-		TimestampSignup: m.TimestampSignup.Format("2006-01-02 15:04:05"),
-		TimestampOpt:    m.TimestampOpt.Format("2006-01-02 15:04:05"),
-	})
-}
-
-// UnmarshalJSON handles custom JSON unmarshalling for Member objects.
+// UnmarshalJSON handles custom JSON unmarshalling for the Member object.
 // Credit to http://choly.ca/post/go-json-marshalling/
 func (m *Member) UnmarshalJSON(data []byte) error {
 	var err error
@@ -145,10 +130,25 @@ type NewParams struct {
 	VIP             bool                   `json:"vip,omitempty"`
 	Location        *Location              `json:"location,omitempty"`
 	IPSignup        string                 `json:"ip_signup,omitempty"`
-	TimestampSignup string                 `json:"timestamp_signup,omitempty"`
+	TimestampSignup time.Time              `json:"timestamp_signup,omitempty"`
 	IPOpt           string                 `json:"ip_opt,omitempty"`
-	TimestampOpt    string                 `json:"timestamp_opt,omitempty"`
+	TimestampOpt    time.Time              `json:"timestamp_opt,omitempty"`
 	EmailAddress    string                 `json:"email_address"`
+}
+
+// MarshalJSON handles custom JSON marshalling for the NewParams object.
+// Credit to http://choly.ca/post/go-json-marshalling/
+func (np *NewParams) MarshalJSON() ([]byte, error) {
+	type alias NewParams
+	return json.Marshal(&struct {
+		*alias
+		TimestampSignup string `json:"timestamp_signup,omitempty"`
+		TimestampOpt    string `json:"timestamp_opt,omitempty"`
+	}{
+		alias:           (*alias)(np),
+		TimestampSignup: np.TimestampSignup.Format("2006-01-02 15:04:05"),
+		TimestampOpt:    np.TimestampOpt.Format("2006-01-02 15:04:05"),
+	})
 }
 
 // GetParams defines the available parameters that can be used when
