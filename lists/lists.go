@@ -89,6 +89,20 @@ type NewParams struct {
 	Visibility          Visibility        `json:"visibility"`
 }
 
+// GetParams defines the available parameters that can be used when
+// getting information about all lists via the Get function.
+type GetParams struct {
+	Fields                 string `url:"fields,omitempty"`
+	ExcludeFields          string `url:"exclude_fields,omitempty"`
+	Count                  int    `url:"count,omitempty"`
+	Offset                 int    `url:"offset,omitempty"`
+	BeforeDateCreated      string `url:"before_date_created,omitempty"`
+	SinceDateCreated       string `url:"since_date_created,omitempty"`
+	BeforeCampaignLastSent string `url:"before_campaign_last_sent,omitempty"`
+	SinceCampaignLastSent  string `url:"since_campaign_last_sent,omitempty"`
+	Email                  string `url:"email,omitempty"`
+}
+
 // New creates a new list.
 //
 // Method:     POST
