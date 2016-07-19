@@ -2,10 +2,15 @@ package members
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	mailchimp "github.com/beeker1121/mailchimp-go"
+	"github.com/beeker1121/mailchimp-go/query"
 )
+
+// timeFormat defines the MailChimp timestamp format.
+const timeFormat string = "2006-01-02 15:04:05"
 
 // EmailType defines the type of email a member asked to get.
 type EmailType string
@@ -97,12 +102,12 @@ func (m *Member) UnmarshalJSON(data []byte) error {
 	}
 
 	if aux.TimestampSignup != "" {
-		if m.TimestampSignup, err = time.Parse("2006-01-02 15:04:05", aux.TimestampSignup); err != nil {
+		if m.TimestampSignup, err = time.Parse(timeFormat, aux.TimestampSignup); err != nil {
 			return err
 		}
 	}
 	if aux.TimestampOpt != "" {
-		if m.TimestampOpt, err = time.Parse("2006-01-02 15:04:05", aux.TimestampOpt); err != nil {
+		if m.TimestampOpt, err = time.Parse(timeFormat, aux.TimestampOpt); err != nil {
 			return err
 		}
 	}
@@ -146,26 +151,58 @@ func (np *NewParams) MarshalJSON() ([]byte, error) {
 		TimestampOpt    string `json:"timestamp_opt,omitempty"`
 	}{
 		alias:           (*alias)(np),
-		TimestampSignup: np.TimestampSignup.Format("2006-01-02 15:04:05"),
-		TimestampOpt:    np.TimestampOpt.Format("2006-01-02 15:04:05"),
+		TimestampSignup: np.TimestampSignup.Format(timeFormat),
+		TimestampOpt:    np.TimestampOpt.Format(timeFormat),
 	})
 }
 
 // GetParams defines the available parameters that can be used when
 // getting a list of members via the Get function.
 type GetParams struct {
-	Fields             string    `url:"fields,omitempty"`
-	ExcludeFields      string    `url:"exclude_fields,omitempty"`
+	Fields             []string  `url:"fields,omitempty"`
+	ExcludeFields      []string  `url:"exclude_fields,omitempty"`
 	Count              int       `url:"count,omitempty"`
 	Offset             int       `url:"offset,omitempty"`
 	EmailType          EmailType `url:"email_type,omitempty"`
 	Status             Status    `url:"status,omitempty"`
-	SinceTimestampOpt  string    `url:"since_timestamp_opt,omitempty"`
-	BeforeTimestampOpt string    `url:"before_timestamp_opt,omitempty"`
-	SinceLastChanged   string    `url:"since_last_changed,omitempty"`
-	BeforeLastChanged  string    `url:"before_last_changed,omitempty"`
+	SinceTimestampOpt  time.Time `url:"since_timestamp_opt,omitempty"`
+	BeforeTimestampOpt time.Time `url:"before_timestamp_opt,omitempty"`
+	SinceLastChanged   time.Time `url:"since_last_changed,omitempty"`
+	BeforeLastChanged  time.Time `url:"before_last_changed,omitempty"`
 	UniqueEmailID      string    `url:"unique_email_id,omitempty"`
 	VIPOnly            bool      `url:"vip_only,omitempty"`
+}
+
+// EncodeQueryString handles custom query string encoding for the
+// GetParams object.
+func (gp *GetParams) EncodeQueryString(v interface{}) (string, error) {
+	return query.Encode(struct {
+		Fields             string    `url:"fields,omitempty"`
+		ExcludeFields      string    `url:"exclude_fields,omitempty"`
+		Count              int       `url:"count,omitempty"`
+		Offset             int       `url:"offset,omitempty"`
+		EmailType          EmailType `url:"email_type,omitempty"`
+		Status             Status    `url:"status,omitempty"`
+		SinceTimestampOpt  string    `url:"since_timestamp_opt,omitempty"`
+		BeforeTimestampOpt string    `url:"before_timestamp_opt,omitempty"`
+		SinceLastChanged   string    `url:"since_last_changed,omitempty"`
+		BeforeLastChanged  string    `url:"before_last_changed,omitempty"`
+		UniqueEmailID      string    `url:"unique_email_id,omitempty"`
+		VIPOnly            bool      `url:"vip_only,omitempty"`
+	}{
+		Fields:             strings.Join(gp.Fields, ","),
+		ExcludeFields:      strings.Join(gp.ExcludeFields, ","),
+		Count:              gp.Count,
+		Offset:             gp.Offset,
+		EmailType:          gp.EmailType,
+		Status:             gp.Status,
+		SinceTimestampOpt:  gp.SinceTimestampOpt.Format(timeFormat),
+		BeforeTimestampOpt: gp.BeforeTimestampOpt.Format(timeFormat),
+		SinceLastChanged:   gp.SinceLastChanged.Format(timeFormat),
+		BeforeLastChanged:  gp.BeforeLastChanged.Format(timeFormat),
+		UniqueEmailID:      gp.UniqueEmailID,
+		VIPOnly:            gp.VIPOnly,
+	})
 }
 
 // GetMemberParams defines the available parameters that can be used
@@ -204,8 +241,8 @@ func (up *UpdateParams) MarshalJSON() ([]byte, error) {
 		TimestampOpt    string `json:"timestamp_opt,omitempty"`
 	}{
 		alias:           (*alias)(up),
-		TimestampSignup: up.TimestampSignup.Format("2006-01-02 15:04:05"),
-		TimestampOpt:    up.TimestampOpt.Format("2006-01-02 15:04:05"),
+		TimestampSignup: up.TimestampSignup.Format(timeFormat),
+		TimestampOpt:    up.TimestampOpt.Format(timeFormat),
 	})
 }
 
