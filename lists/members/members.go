@@ -74,7 +74,7 @@ type Member struct {
 	IPOpt           string                 `json:"ip_opt,omitempty"`
 	TimestampOpt    time.Time              `json:"timestamp_opt,omitempty"`
 	MemberRating    uint8                  `json:"member_rating,omitempty"`
-	LastChanged     string                 `json:"last_changed,omitempty"`
+	LastChanged     time.Time              `json:"last_changed,omitempty"`
 	Language        string                 `json:"language,omitempty"`
 	VIP             bool                   `json:"vip,omitempty"`
 	EmailClient     string                 `json:"email_client,omitempty"`
@@ -93,6 +93,7 @@ func (m *Member) UnmarshalJSON(data []byte) error {
 		*alias
 		TimestampSignup string `json:"timestamp_signup,omitempty"`
 		TimestampOpt    string `json:"timestamp_opt,omitempty"`
+		LastChanged     string `json:"last_changed,omitempty"`
 	}{
 		alias: (*alias)(m),
 	}
@@ -108,6 +109,11 @@ func (m *Member) UnmarshalJSON(data []byte) error {
 	}
 	if aux.TimestampOpt != "" {
 		if m.TimestampOpt, err = time.Parse(timeFormat, aux.TimestampOpt); err != nil {
+			return err
+		}
+	}
+	if aux.LastChanged != "" {
+		if m.LastChanged, err = time.Parse(timeFormat, aux.LastChanged); err != nil {
 			return err
 		}
 	}
