@@ -2,6 +2,7 @@ package members
 
 import (
 	"fmt"
+	"time"
 
 	mailchimp "github.com/beeker1121/mailchimp-go"
 )
@@ -64,9 +65,9 @@ type Member struct {
 	Interests       map[string]bool        `json:"interests,omitempty"`
 	Stats           *Stats                 `json:"stats,omitempty"`
 	IPSignup        string                 `json:"ip_signup,omitempty"`
-	TimestampSignup string                 `json:"timestamp_signup,omitempty"`
+	TimestampSignup time.Time              `json:"timestamp_signup,omitempty"`
 	IPOpt           string                 `json:"ip_opt,omitempty"`
-	TimestampOpt    string                 `json:"timestamp_opt,omitempty"`
+	TimestampOpt    time.Time              `json:"timestamp_opt,omitempty"`
 	MemberRating    uint8                  `json:"member_rating,omitempty"`
 	LastChanged     string                 `json:"last_changed,omitempty"`
 	Language        string                 `json:"language,omitempty"`
@@ -75,6 +76,53 @@ type Member struct {
 	Location        *Location              `json:"location,omitempty"`
 	LastNote        *Note                  `json:"last_note,omitempty"`
 	ListID          string                 `json:"list_id"`
+}
+
+// MarshalJSON handles custom JSON marshalling for Member objects.
+// Credit to http://choly.ca/post/go-json-marshalling/
+func (m *Member) MarshalJSON() ([]byte, error) {
+	type alias Member
+	return json.Marshal(&struct {
+		*alias
+		TimestampSignup string `json:"timestamp_signup,omitempty"`
+		TimestampOpt    string `json:"timestamp_opt,omitempty"`
+	}{
+		alias:           (*alias)(m),
+		TimestampSignup: m.TimestampSignup.Format("2006-01-02 15:04:05"),
+		TimestampOpt:    m.TimestampOpt.Format("2006-01-02 15:04:05"),
+	})
+}
+
+// UnmarshalJSON handles custom JSON unmarshalling for Member objects.
+// Credit to http://choly.ca/post/go-json-marshalling/
+func (m *Member) UnmarshalJSON(data []byte) error {
+	var err error
+	type alias Member
+
+	aux := &struct {
+		*alias
+		TimestampSignup string `json:"timestamp_signup,omitempty"`
+		TimestampOpt    string `json:"timestamp_opt,omitempty"`
+	}{
+		alias: (*alias)(m),
+	}
+
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+
+	if aux.TimestampSignup != "" {
+		if m.TimestampSignup, err = time.Parse("2006-01-02 15:04:05", aux.TimestampSignup); err != nil {
+			return err
+		}
+	}
+	if aux.TimestampOpt != "" {
+		if m.TimestampOpt, err = time.Parse("2006-01-02 15:04:05", aux.TimestampOpt); err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 // ListMembers defines a list of members.
