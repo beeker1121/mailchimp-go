@@ -209,8 +209,20 @@ func (gp *GetParams) EncodeQueryString(v interface{}) (string, error) {
 // when getting information on a specific member via the GetMember
 // function.
 type GetMemberParams struct {
-	Fields        string `url:"fields,omitempty"`
-	ExcludeFields string `url:"exclude_fields,omitempty"`
+	Fields        []string `url:"fields,omitempty"`
+	ExcludeFields []string `url:"exclude_fields,omitempty"`
+}
+
+// EncodeQueryString handles custom query string encoding for the
+// GetMemberParams object.
+func (gmp *GetMemberParams) EncodeQueryString(v interface{}) (string, error) {
+	return query.Encode(struct {
+		Fields        string `url:"fields,omitempty"`
+		ExcludeFields string `url:"exclude_fields,omitempty"`
+	}{
+		Fields:        strings.Join(gmp.Fields, ","),
+		ExcludeFields: strings.Join(gmp.ExcludeFields, ","),
+	})
 }
 
 // UpdateParams defines the available parameters that can be used when
