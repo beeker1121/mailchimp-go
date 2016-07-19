@@ -34,14 +34,30 @@ var timeType = reflect.TypeOf(time.Time{})
 
 var encoderType = reflect.TypeOf(new(Encoder)).Elem()
 
+var valueEncoderType = reflect.TypeOf(new(ValueEncoder)).Elem()
+
 // Encoder is an interface implemented by any type that wishes to encode
-// itself into URL values in a non-standard way.
+// itself into a query string in a non-standard way.
 type Encoder interface {
+	EncodeQueryString(v interface{}) (string, error)
+}
+
+// ValueEncoder is an interface implemented by any type that wishes to
+// encode itself into URL values in a non-standard way.
+type ValueEncoder interface {
 	EncodeValues(key string, v *url.Values) error
 }
 
-// String returns the query string encoding of v.
-func String(v interface{}) (string, error) {
+// Encode returns the query string encoding of v.
+func Encode(v interface{}) (string, error) {
+	// Check if v implements Encoder interface.
+	typ := reflect.TypeOf(v)
+	val := reflect.ValueOf(v)
+	if typ.Implements(encoderType) {
+		m := val.Interface().(Encoder)
+		return m.EncodeQueryString(v)
+	}
+
 	vals, err := Values(v)
 	if err != nil {
 		return "", err
@@ -179,12 +195,12 @@ func reflectValue(values url.Values, val reflect.Value, scope string) error {
 			continue
 		}
 
-		if sv.Type().Implements(encoderType) {
+		if sv.Type().Implements(valueEncoderType) {
 			if !reflect.Indirect(sv).IsValid() {
 				sv = reflect.New(sv.Type().Elem())
 			}
 
-			m := sv.Interface().(Encoder)
+			m := sv.Interface().(ValueEncoder)
 			if err := m.EncodeValues(name, &values); err != nil {
 				return err
 			}

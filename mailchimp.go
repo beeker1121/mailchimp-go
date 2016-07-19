@@ -54,7 +54,7 @@ func Call(method, path string, queryParams, bodyParams, v interface{}) error {
 
 	// Handle the query parameters.
 	if queryParams != nil {
-		q, err := query.String(queryParams)
+		q, err := query.Encode(queryParams)
 		if err != nil {
 			return err
 		}
