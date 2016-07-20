@@ -51,10 +51,10 @@ type Location struct {
 
 // Note defines a note about a member.
 type Note struct {
-	NoteID    int    `json:"note_id"`
-	CreatedAt string `json:"created_at"`
-	CreatedBy string `json:"created_by"`
-	Note      string `json:"note"`
+	NoteID    int       `json:"note_id"`
+	CreatedAt time.Time `json:"created_at"`
+	CreatedBy string    `json:"created_by"`
+	Note      string    `json:"note"`
 }
 
 // UnmarshalJSON handles custom JSON unmarshalling for the Note object.
