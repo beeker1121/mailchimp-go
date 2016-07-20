@@ -1,10 +1,14 @@
 package lists
 
 import (
+	"encoding/json"
 	"time"
 
 	mailchimp "github.com/beeker1121/mailchimp-go"
 )
+
+// timeFormat defines the MailChimp timestamp format.
+const timeFormat string = "2006-01-02 15:04:05"
 
 // Contact defines the contact information of the list owner, which
 // is displayed in the footer of campaigns.
@@ -60,7 +64,7 @@ type Stats struct {
 // Credit to http://choly.ca/post/go-json-marshalling/
 func (s *Stats) UnmarshalJSON(data []byte) error {
 	var err error
-	type alias Member
+	type alias Stats
 
 	aux := &struct {
 		*alias
@@ -121,7 +125,7 @@ type List struct {
 // Credit to http://choly.ca/post/go-json-marshalling/
 func (l *List) UnmarshalJSON(data []byte) error {
 	var err error
-	type alias Member
+	type alias List
 
 	aux := &struct {
 		*alias
