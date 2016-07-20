@@ -1,6 +1,10 @@
 package lists
 
-import mailchimp "github.com/beeker1121/mailchimp-go"
+import (
+	"time"
+
+	mailchimp "github.com/beeker1121/mailchimp-go"
+)
 
 // Contact defines the contact information of the list owner, which
 // is displayed in the footer of campaigns.
@@ -34,22 +38,60 @@ const (
 
 // Stats defines statistics for a list.
 type Stats struct {
-	MemberCount               uint    `json:"member_count,omitempty"`
-	UnsubscribeCount          uint    `json:"unsubscribe_count,omitempty"`
-	CleanedCount              uint    `json:"cleaned_count,omitempty"`
-	MemberCountSinceSend      uint    `json:"member_count_since_send,omitempty"`
-	UnsubscribeCountSinceSend uint    `json:"unsubscribe_count_since_send,omitempty"`
-	CleanedCountSinceSend     uint    `json:"cleaned_count_since_send,omitempty"`
-	CampaignCount             uint    `json:"campaign_count,omitempty"`
-	CampaignLastSent          string  `json:"campaign_last_sent,omitempty"`
-	MergeFieldCount           uint    `json:"merge_field_count,omitempty"`
-	AvgSubRate                float64 `json:"avg_sub_rate,omitempty"`
-	AvgUnsubRate              float64 `json:"avg_unsub_rate,omitempty"`
-	TargetSubRate             float64 `json:"target_sub_rate,omitempty"`
-	OpenRate                  float32 `json:"open_rate,omitempty"`
-	ClickRate                 float32 `json:"click_rate,omitempty"`
-	LastSubDate               string  `json:"last_sub_date,omitempty"`
-	LastUnsubDate             string  `json:"last_unsub_date,omitempty"`
+	MemberCount               uint      `json:"member_count,omitempty"`
+	UnsubscribeCount          uint      `json:"unsubscribe_count,omitempty"`
+	CleanedCount              uint      `json:"cleaned_count,omitempty"`
+	MemberCountSinceSend      uint      `json:"member_count_since_send,omitempty"`
+	UnsubscribeCountSinceSend uint      `json:"unsubscribe_count_since_send,omitempty"`
+	CleanedCountSinceSend     uint      `json:"cleaned_count_since_send,omitempty"`
+	CampaignCount             uint      `json:"campaign_count,omitempty"`
+	CampaignLastSent          time.Time `json:"campaign_last_sent,omitempty"`
+	MergeFieldCount           uint      `json:"merge_field_count,omitempty"`
+	AvgSubRate                float64   `json:"avg_sub_rate,omitempty"`
+	AvgUnsubRate              float64   `json:"avg_unsub_rate,omitempty"`
+	TargetSubRate             float64   `json:"target_sub_rate,omitempty"`
+	OpenRate                  float32   `json:"open_rate,omitempty"`
+	ClickRate                 float32   `json:"click_rate,omitempty"`
+	LastSubDate               time.Time `json:"last_sub_date,omitempty"`
+	LastUnsubDate             time.Time `json:"last_unsub_date,omitempty"`
+}
+
+// UnmarshalJSON handles custom JSON unmarshalling for the Stats object.
+// Credit to http://choly.ca/post/go-json-marshalling/
+func (s *Stats) UnmarshalJSON(data []byte) error {
+	var err error
+	type alias Member
+
+	aux := &struct {
+		*alias
+		CampaignLastSent string `json:"campaign_last_sent,omitempty"`
+		LastSubDate      string `json:"last_sub_date,omitempty"`
+		LastUnsubDate    string `json:"last_unsub_date,omitempty"`
+	}{
+		alias: (*alias)(s),
+	}
+
+	if err := json.Unmarshal(data, aux); err != nil {
+		return err
+	}
+
+	if aux.CampaignLastSent != "" {
+		if s.CampaignLastSent, err = time.Parse(timeFormat, aux.CampaignLastSent); err != nil {
+			return err
+		}
+	}
+	if aux.LastSubDate != "" {
+		if s.LastSubDate, err = time.Parse(timeFormat, aux.LastSubDate); err != nil {
+			return err
+		}
+	}
+	if aux.LastUnsubDate != "" {
+		if s.LastUnsubDate, err = time.Parse(timeFormat, aux.LastUnsubDate); err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 // List defines a list.
@@ -64,7 +106,7 @@ type List struct {
 	CampaignDefaults    *CampaignDefaults `json:"campaign_defaults"`
 	NotifyOnSubscribe   string            `json:"notify_on_subscribe,omitempty"`
 	NotifyOnUnsubscribe string            `json:"notify_on_unsubscribe,omitempty"`
-	DateCreated         string            `json:"date_created,omitempty"`
+	DateCreated         time.Time         `json:"date_created,omitempty"`
 	ListRating          uint8             `json:"list_rating,omitempty"`
 	EmailTypeOption     bool              `json:"email_type_option"`
 	SubscribeUrlShort   string            `json:"subscribe_url_short,omitempty"`
@@ -73,6 +115,32 @@ type List struct {
 	Visibility          Visibility        `json:"visibility"`
 	Modules             []string          `json:"modules,omitempty"`
 	Stats               *Stats            `json:"stats,omitempty"`
+}
+
+// UnmarshalJSON handles custom JSON unmarshalling for the List object.
+// Credit to http://choly.ca/post/go-json-marshalling/
+func (l *List) UnmarshalJSON(data []byte) error {
+	var err error
+	type alias Member
+
+	aux := &struct {
+		*alias
+		DateCreated string `json:"date_created,omitempty"`
+	}{
+		alias: (*alias)(l),
+	}
+
+	if err := json.Unmarshal(data, aux); err != nil {
+		return err
+	}
+
+	if aux.DateCreated != "" {
+		if l.DateCreated, err = time.Parse(timeFormat, aux.DateCreated); err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 // NewParams defines the available parameters that can be used when
