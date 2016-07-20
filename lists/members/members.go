@@ -57,6 +57,32 @@ type Note struct {
 	Note      string `json:"note"`
 }
 
+// UnmarshalJSON handles custom JSON unmarshalling for the Note object.
+// Credit to http://choly.ca/post/go-json-marshalling/
+func (n *Note) UnmarshalJSON(data []byte) error {
+	var err error
+	type alias Note
+
+	aux := &struct {
+		*alias
+		CreatedAt string `json:"created_at"`
+	}{
+		alias: (*alias)(n),
+	}
+
+	if err := json.Unmarshal(data, aux); err != nil {
+		return err
+	}
+
+	if aux.CreatedAt != "" {
+		if n.CreatedAt, err = time.Parse(timeFormat, aux.CreatedAt); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 // Member defines a single member within a list.
 //
 // Schema: https://api.mailchimp.com/schema/3.0/Lists/Members/Instance.json
