@@ -8,11 +8,11 @@ import (
 var (
 	// ErrAPIKeyNotSet is returned when a call to the API is
 	// attempted before the user set an API key.
-	ErrAPIKeyNotSet = errors.New("gochimp: API key has not been set")
+	ErrAPIKeyNotSet = errors.New("mailchimp: API key has not been set")
 
 	// ErrAPIKeyFormat is returned when the provided API key
 	// is in an invalid format.
-	ErrAPIKeyFormat = errors.New("gochimp: Invalid API key format")
+	ErrAPIKeyFormat = errors.New("mailchimp: Invalid API key format")
 )
 
 // Error defines a field error.
@@ -32,5 +32,5 @@ type APIError struct {
 
 // Error satisfies the error interface method.
 func (ae *APIError) Error() string {
-	return fmt.Sprintf("gochimp: API Error: Status: %d Title: %s Detail: %s", ae.Status, ae.Title, ae.Detail)
+	return fmt.Sprintf("mailchimp: API Error: Status: %d Title: %s Detail: %s", ae.Status, ae.Title, ae.Detail)
 }

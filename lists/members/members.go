@@ -10,9 +10,6 @@ import (
 	"github.com/beeker1121/mailchimp-go/query"
 )
 
-// timeFormat defines the MailChimp timestamp format.
-const timeFormat string = "2006-01-02 15:04:05"
-
 // EmailType defines the type of email a member asked to get.
 type EmailType string
 
@@ -76,7 +73,7 @@ func (n *Note) UnmarshalJSON(data []byte) error {
 	}
 
 	if aux.CreatedAt != "" {
-		if n.CreatedAt, err = time.Parse(timeFormat, aux.CreatedAt); err != nil {
+		if n.CreatedAt, err = time.Parse(time.RFC3339, aux.CreatedAt); err != nil {
 			return err
 		}
 	}
@@ -85,8 +82,6 @@ func (n *Note) UnmarshalJSON(data []byte) error {
 }
 
 // Member defines a single member within a list.
-//
-// Schema: https://api.mailchimp.com/schema/3.0/Lists/Members/Instance.json
 type Member struct {
 	ID              string                 `json:"id"`
 	EmailAddress    string                 `json:"email_address"`
@@ -130,17 +125,17 @@ func (m *Member) UnmarshalJSON(data []byte) error {
 	}
 
 	if aux.TimestampSignup != "" {
-		if m.TimestampSignup, err = time.Parse(timeFormat, aux.TimestampSignup); err != nil {
+		if m.TimestampSignup, err = time.Parse(time.RFC3339, aux.TimestampSignup); err != nil {
 			return err
 		}
 	}
 	if aux.TimestampOpt != "" {
-		if m.TimestampOpt, err = time.Parse(timeFormat, aux.TimestampOpt); err != nil {
+		if m.TimestampOpt, err = time.Parse(time.RFC3339, aux.TimestampOpt); err != nil {
 			return err
 		}
 	}
 	if aux.LastChanged != "" {
-		if m.LastChanged, err = time.Parse(timeFormat, aux.LastChanged); err != nil {
+		if m.LastChanged, err = time.Parse(time.RFC3339, aux.LastChanged); err != nil {
 			return err
 		}
 	}
@@ -149,8 +144,6 @@ func (m *Member) UnmarshalJSON(data []byte) error {
 }
 
 // ListMembers defines a list of members.
-//
-// Schema: https://api.mailchimp.com/schema/3.0/Lists/Members/Collection.json
 type ListMembers struct {
 	Members    []Member `json:"members,omitempty"`
 	ListID     string   `json:"list_id"`
@@ -177,6 +170,16 @@ type NewParams struct {
 // MarshalJSON handles custom JSON marshalling for the NewParams object.
 // Credit to http://choly.ca/post/go-json-marshalling/
 func (np *NewParams) MarshalJSON() ([]byte, error) {
+	var timestampSignup string
+	var timestampOpt string
+
+	if !np.TimestampSignup.IsZero() {
+		timestampSignup = np.TimestampSignup.Format(time.RFC3339)
+	}
+	if !np.TimestampOpt.IsZero() {
+		timestampOpt = np.TimestampOpt.Format(time.RFC3339)
+	}
+
 	type alias NewParams
 	return json.Marshal(&struct {
 		*alias
@@ -184,8 +187,8 @@ func (np *NewParams) MarshalJSON() ([]byte, error) {
 		TimestampOpt    string `json:"timestamp_opt,omitempty"`
 	}{
 		alias:           (*alias)(np),
-		TimestampSignup: np.TimestampSignup.Format(timeFormat),
-		TimestampOpt:    np.TimestampOpt.Format(timeFormat),
+		TimestampSignup: timestampSignup,
+		TimestampOpt:    timestampOpt,
 	})
 }
 
@@ -209,6 +212,24 @@ type GetParams struct {
 // EncodeQueryString handles custom query string encoding for the
 // GetParams object.
 func (gp *GetParams) EncodeQueryString(v interface{}) (string, error) {
+	var sinceTimestampOpt string
+	var beforeTimestampOpt string
+	var sinceLastChanged string
+	var beforeLastChanged string
+
+	if !gp.SinceTimestampOpt.IsZero() {
+		sinceTimestampOpt = gp.SinceTimestampOpt.Format(time.RFC3339)
+	}
+	if !gp.BeforeTimestampOpt.IsZero() {
+		beforeTimestampOpt = gp.BeforeTimestampOpt.Format(time.RFC3339)
+	}
+	if !gp.SinceLastChanged.IsZero() {
+		sinceLastChanged = gp.SinceLastChanged.Format(time.RFC3339)
+	}
+	if !gp.BeforeLastChanged.IsZero() {
+		beforeLastChanged = gp.BeforeLastChanged.Format(time.RFC3339)
+	}
+
 	return query.Encode(struct {
 		Fields             string    `url:"fields,omitempty"`
 		ExcludeFields      string    `url:"exclude_fields,omitempty"`
@@ -229,10 +250,10 @@ func (gp *GetParams) EncodeQueryString(v interface{}) (string, error) {
 		Offset:             gp.Offset,
 		EmailType:          gp.EmailType,
 		Status:             gp.Status,
-		SinceTimestampOpt:  gp.SinceTimestampOpt.Format(timeFormat),
-		BeforeTimestampOpt: gp.BeforeTimestampOpt.Format(timeFormat),
-		SinceLastChanged:   gp.SinceLastChanged.Format(timeFormat),
-		BeforeLastChanged:  gp.BeforeLastChanged.Format(timeFormat),
+		SinceTimestampOpt:  sinceTimestampOpt,
+		BeforeTimestampOpt: beforeTimestampOpt,
+		SinceLastChanged:   sinceLastChanged,
+		BeforeLastChanged:  beforeLastChanged,
 		UniqueEmailID:      gp.UniqueEmailID,
 		VIPOnly:            gp.VIPOnly,
 	})
@@ -279,6 +300,16 @@ type UpdateParams struct {
 // MarshalJSON handles custom JSON marshalling for the UpdateParams object.
 // Credit to http://choly.ca/post/go-json-marshalling/
 func (up *UpdateParams) MarshalJSON() ([]byte, error) {
+	var timestampSignup string
+	var timestampOpt string
+
+	if !up.TimestampSignup.IsZero() {
+		timestampSignup = up.TimestampSignup.Format(time.RFC3339)
+	}
+	if !up.TimestampOpt.IsZero() {
+		timestampOpt = up.TimestampOpt.Format(time.RFC3339)
+	}
+
 	type alias UpdateParams
 	return json.Marshal(&struct {
 		*alias
@@ -286,19 +317,23 @@ func (up *UpdateParams) MarshalJSON() ([]byte, error) {
 		TimestampOpt    string `json:"timestamp_opt,omitempty"`
 	}{
 		alias:           (*alias)(up),
-		TimestampSignup: up.TimestampSignup.Format(timeFormat),
-		TimestampOpt:    up.TimestampOpt.Format(timeFormat),
+		TimestampSignup: timestampSignup,
+		TimestampOpt:    timestampOpt,
 	})
 }
 
 // New adds a new list member.
-//
-// Method:     POST
-// Resource:   /lists/{list_id}/members
-// Definition: http://developer.mailchimp.com/documentation/mailchimp/reference/lists/members/#create-post_lists_list_id_members
 func New(listID string, params *NewParams) (*Member, error) {
 	res := &Member{}
 	path := fmt.Sprintf("lists/%s/members", listID)
+
+	if params == nil {
+		if err := mailchimp.Call("POST", path, nil, nil, res); err != nil {
+			return nil, err
+		}
+		return res, nil
+	}
+
 	if err := mailchimp.Call("POST", path, nil, params, res); err != nil {
 		return nil, err
 	}
@@ -306,13 +341,17 @@ func New(listID string, params *NewParams) (*Member, error) {
 }
 
 // Get retrieves information about members in a list.
-//
-// Method:     GET
-// Resource:   /lists/{list_id}/members
-// Definition: http://developer.mailchimp.com/documentation/mailchimp/reference/lists/members/#read-get_lists_list_id_members
 func Get(listID string, params *GetParams) (*ListMembers, error) {
 	res := &ListMembers{}
 	path := fmt.Sprintf("lists/%s/members", listID)
+
+	if params == nil {
+		if err := mailchimp.Call("GET", path, nil, nil, res); err != nil {
+			return nil, err
+		}
+		return res, nil
+	}
+
 	if err := mailchimp.Call("GET", path, params, nil, res); err != nil {
 		return nil, err
 	}
@@ -320,13 +359,17 @@ func Get(listID string, params *GetParams) (*ListMembers, error) {
 }
 
 // GetMember retrieves information about a specific member within a list.
-//
-// Method:     GET
-// Resource:   /lists/{list_id}/members/{subscriber_hash}
-// Definition: http://developer.mailchimp.com/documentation/mailchimp/reference/lists/members/#read-get_lists_list_id_members_subscriber_hash
 func GetMember(listID, hash string, params *GetMemberParams) (*Member, error) {
 	res := &Member{}
 	path := fmt.Sprintf("lists/%s/members/%s", listID, hash)
+
+	if params == nil {
+		if err := mailchimp.Call("GET", path, nil, nil, res); err != nil {
+			return nil, err
+		}
+		return res, nil
+	}
+
 	if err := mailchimp.Call("GET", path, params, nil, res); err != nil {
 		return nil, err
 	}
@@ -334,13 +377,17 @@ func GetMember(listID, hash string, params *GetMemberParams) (*Member, error) {
 }
 
 // Update updates a list member.
-//
-// Method:     PUT
-// Resource:   /lists/{list_id}/members/{subscriber_hash}
-// Definition: http://developer.mailchimp.com/documentation/mailchimp/reference/lists/members/#edit-put_lists_list_id_members_subscriber_hash
 func Update(listID, hash string, params *UpdateParams) (*Member, error) {
 	res := &Member{}
 	path := fmt.Sprintf("lists/%s/members/%s", listID, hash)
+
+	if params == nil {
+		if err := mailchimp.Call("PUT", path, nil, nil, res); err != nil {
+			return nil, err
+		}
+		return res, nil
+	}
+
 	if err := mailchimp.Call("PUT", path, nil, params, res); err != nil {
 		return nil, err
 	}
@@ -348,14 +395,7 @@ func Update(listID, hash string, params *UpdateParams) (*Member, error) {
 }
 
 // Delete deletes a list member.
-//
-// Method:     DELETE
-// Resource:   /lists/{list_id}/members/{subscriber_hash}
-// Definition: http://developer.mailchimp.com/documentation/mailchimp/reference/lists/members/#delete-delete_lists_list_id_members_subscriber_hash
 func Delete(listID, hash string) error {
 	path := fmt.Sprintf("lists/%s/members/%s", listID, hash)
-	if err := mailchimp.Call("DELETE", path, nil, nil, nil); err != nil {
-		return err
-	}
-	return nil
+	return mailchimp.Call("DELETE", path, nil, nil, nil)
 }
