@@ -134,9 +134,20 @@ member, err := members.GetMember("123456", "123" nil)
 fmt.Printf("%+v\n", member)
 ```
 
+### Delete list member
+
+```go
+import "github.com/beeker1121/mailchimp-go/lists/members"
+...
+
+// Delete member 123 from list 123456.
+err := members.Delete("123456", "123")
+...
+```
+
 ## Testing
 
-To test this library, you must have a valid MailChimp account and API key.
+To run the tests, you must have a valid MailChimp account and API key.
 
 Set the API key environment variable:
 
