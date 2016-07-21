@@ -122,7 +122,7 @@ listMembers, err := members.Get("123456", params)
 fmt.Printf("%+v\n", listMembers)
 ```
 
-### Get list member
+### Get a list member
 
 ```go
 import "github.com/beeker1121/mailchimp-go/lists/members"
@@ -134,7 +134,7 @@ member, err := members.GetMember("123456", "123" nil)
 fmt.Printf("%+v\n", member)
 ```
 
-### Delete list member
+### Delete a list member
 
 ```go
 import "github.com/beeker1121/mailchimp-go/lists/members"
