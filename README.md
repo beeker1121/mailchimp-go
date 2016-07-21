@@ -160,3 +160,10 @@ Run the tests from the mailchimp-go directory:
 ```sh
 go test -v ./...
 ```
+
+## Thanks
+
+**The Go Devs** - For existing  
+**Discord Gophers** ([Join Chat](https://discordapp.com/channels/118456055842734083/118456055842734083)) - Troubleshooting and advice  
+**go-querystring** ([https://github.com/google/go-querystring](https://github.com/google/go-querystring)) - Query string library  
+**Choly** ([http://choly.ca/](http://choly.ca/)) - custom JSON solution
