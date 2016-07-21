@@ -121,3 +121,31 @@ listMembers, err := members.Get("123456", params)
 ...
 fmt.Printf("%+v\n", listMembers)
 ```
+
+### Get list member
+
+```go
+import "github.com/beeker1121/mailchimp-go/lists/members"
+...
+
+// Get member 123 from list 123456.
+member, err := members.GetMember("123456", "123" nil)
+...
+fmt.Printf("%+v\n", member)
+```
+
+## Testing
+
+To test this library, you must have a valid MailChimp account and API key.
+
+Set the API key environment variable:
+
+```sh
+export MAILCHIMP_API_KEY=your-key
+```
+
+Run the tests from the mailchimp-go directory:
+
+```sh
+go test -v ./...
+```
