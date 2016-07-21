@@ -1,4 +1,4 @@
-# mailchimp-go [![License](http://img.shields.io/badge/license-mit_bsd-blue.svg)](https://raw.githubusercontent.com/beeker1121/mailchimp-go/master/LICENSE) [![Go Report Card](https://img.shields.io/badge/go_report-A+-brightgreen.svg)](https://goreportcard.com/report/github.com/beeker1121/mailchimp-go)
+# mailchimp-go [![License](http://img.shields.io/badge/license-mit_bsd-blue.svg)](https://raw.githubusercontent.com/beeker1121/mailchimp-go/master/LICENSE) [![Go Report Card](https://img.shields.io/badge/go_report-A+-brightgreen.svg)](https://goreportcard.com/report/github.com/beeker1121/mailchimp-go) [![Build Status](https://travis-ci.org/beeker1121/mailchimp-go.svg?branch=master)](https://travis-ci.org/beeker1121/mailchimp-go)
 
 mailchimp-go is a Go client for the MailChimp API v3.
 
