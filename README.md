@@ -129,7 +129,7 @@ import "github.com/beeker1121/mailchimp-go/lists/members"
 ...
 
 // Get member 123 from list 123456.
-member, err := members.GetMember("123456", "123" nil)
+member, err := members.GetMember("123456", "123", nil)
 ...
 fmt.Printf("%+v\n", member)
 ```

@@ -81,7 +81,7 @@ func TestNew(t *testing.T) {
 	}
 
 	if member.EmailAddress != "mailchimp-go-test@github.com" {
-		t.Errorf("Expected member.EmailAddress to equal \"user@example.com\", got %s", member.EmailAddress)
+		t.Errorf("Expected member.EmailAddress to equal \"mailchimp-go-test@github.com\", got %s", member.EmailAddress)
 	}
 
 	if err = Delete(listID, member.ID); err != nil {
