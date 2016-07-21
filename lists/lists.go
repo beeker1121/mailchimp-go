@@ -309,7 +309,7 @@ func GetList(listID string, params *GetListParams) (*List, error) {
 	return res, nil
 }
 
-// GetList retrieves information about a specific list.
+// Update updates a list.
 func Update(listID string, params *UpdateParams) (*List, error) {
 	res := &List{}
 	path := fmt.Sprintf("lists/%s", listID)
