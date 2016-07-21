@@ -4,6 +4,8 @@ go:
   - 1.5
   - 1.6
   - tip
-
+env:
+  global:
+    secure: "J+Aqc6kQtd2s39s+u7r5ni1uzBYdPbw2Oq8W3bz5SvluEhXYYEZk0ubsBh9vy8iXzSfiE7UVqcb2tQFZ38mnWVZ8r3eOttdorwYgG5gc0Nj+xNa+sW1Klgj/M69jg/N9ywWX1At5qXs+OkpTEy5KHBy8g32k0osbwtJ1tUfRsWZwJeTDNvNsmE5ysqInO1bU8KQjp+X2E4ZuE5UlmVkaLFJE/TR6Wnoai7A85iIN3xsMu/Ec09UXaB+zf/YL5SsaLBR0eTbRhSmZHhrvdLhzixtmDP9gXdHqskeIblE+NjXJ/NehOVomUegKRbCol05KCh+57EF1V0Ty7ZWVfgOdi0AxNFBT9zuJG0Y2vdVgjBgSxRK8zPgMSUVSeENMlBQ5gm+IhH/VFQoMcGCZjzwF7eRb+SBTXYjGNktFPTm1cX2yzRPYHKpI8Wti9mekr88jiDY/yDK/Y8p2pIRAAhlcuOz7aVyC74TTMG3AzYsB81C0uHswz5AfkxNE0rKYjdSLeoUMp3B2UQTKPdgAuetFjhfVyvk/K31kTwID/UE/Rxfham+iYvJPhfxoVN+OMTzs4WUn7OqBxwjCIqYCaHQZiLehmh6GtR15Py0UI+K0XGNwW6hwV8Xm4jMLRpVcTR6Y+T+ooJ7/wiYRL+okIe21QKuYipjxALPff1V77EULjvE="
 script:
   - go test -v ./...
